@@ -1,39 +1,126 @@
-
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Exímio - Login</title>
-<link rel="stylesheet" href="telalogin.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exímio - Login</title>
+  <link rel="stylesheet" href="telalogin.css">
+  <style>
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border: none;
+      background-color: #eee;
+      font-weight: bold;
+    }
+
+    .tab.active {
+      background-color: #ccc;
+    }
+
+    .formulario {
+      display: none;
+    }
+
+    .formulario.active {
+      display: block;
+    }
+
+    #mensagem-erro, #mensagem-sucesso {
+      color: red;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-<div class="login-container">
+  <div class="login-container">
     <!-- LOGO -->
     <div class="logo">EXÍMIO</div>
     <div class="linha"></div>
     <div class="subtitulo">Plataforma de Estudos</div>
 
-    <!-- FORMULÁRIO -->
-    <form class="formulario" id="loginForm">
-      <input type="email" placeholder="E-mail" required>
-      <input type="password" placeholder="Senha" required>
+    <!-- Abas -->
+    <div class="tabs">
+      <button class="tab active" onclick="mostrarAba('login')">Login</button>
+      <button class="tab" onclick="mostrarAba('registro')">Registro</button>
+    </div>
 
-      <div class="botoes">
-        <button type="submit">Login</button>
-        <button type="button" onclick="window.location.href='cadastro.html'">Registrar-se</button>
-      </div>
+    <!-- FORMULÁRIO DE LOGIN -->
+    <form class="formulario active" id="loginForm">
+      <input type="email" id="emailLogin" placeholder="E-mail" required>
+      <input type="password" id="senhaLogin" placeholder="Senha" required>
+      <button type="submit">Entrar</button>
+      <p id="mensagem-erro"></p>
+    </form>
+
+    <!-- FORMULÁRIO DE REGISTRO -->
+    <form class="formulario" id="registroForm">
+      <input type="text" id="nomeRegistro" placeholder="Nome completo" required>
+      <input type="email" id="emailRegistro" placeholder="E-mail" required>
+      <input type="password" id="senhaRegistro" placeholder="Senha" required>
+      <button type="submit">Registrar</button>
+      <p id="mensagem-sucesso"></p>
     </form>
   </div>
 
+  <!-- JS -->
   <script>
-    // Garantir que o evento seja interceptado corretamente
+    function mostrarAba(aba) {
+      const tabs = document.querySelectorAll('.tab');
+      const forms = document.querySelectorAll('.formulario');
+
+      tabs.forEach(tab => tab.classList.remove('active'));
+      forms.forEach(form => form.classList.remove('active'));
+
+      document.querySelector(`.tab[onclick*="${aba}"]`).classList.add('active');
+      document.getElementById(aba + 'Form').classList.add('active');
+    }
+
+    // Validação do login
     document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault(); // Evita que o formulário envie de verdade
-      // Simula login bem-sucedido e redireciona
-      window.location.href = 'telalogin.html';
+      e.preventDefault();
+      const email = document.getElementById('emailLogin').value.trim();
+      const senha = document.getElementById('senhaLogin').value.trim();
+      const erro = document.getElementById('mensagem-erro');
+
+      if (email === '' || senha === '') {
+        erro.textContent = 'Por favor, preencha todos os campos.';
+        return;
+      }
+
+      if (email === 'admin@eximio.com' && senha === '1234') {
+        window.location.href = 'telalogin.html';
+      } else {
+        erro.textContent = 'E-mail ou senha incorretos.';
+      }
+    });
+
+    // Validação do registro
+    document.getElementById('registroForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const nome = document.getElementById('nomeRegistro').value.trim();
+      const email = document.getElementById('emailRegistro').value.trim();
+      const senha = document.getElementById('senhaRegistro').value.trim();
+      const sucesso = document.getElementById('mensagem-sucesso');
+
+      if (nome === '' || email === '' || senha === '') {
+        sucesso.textContent = 'Preencha todos os campos!';
+        sucesso.style.color = 'red';
+        return;
+      }
+
+      sucesso.textContent = 'Registro efetuado com sucesso!';
+      sucesso.style.color = 'green';
+
+      // Aqui você pode salvar os dados ou enviar para o servidor.
     });
   </script>
 </body>
 </html>
+
